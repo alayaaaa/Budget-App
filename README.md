@@ -11,7 +11,7 @@ A Budget app that tracks expenses using the 50/30/20 rule and budget based on pa
 ## Version Updates
 ### Version 0.0.2
 - Removed JSON system
-- Replaced JSON System o storing user input/data with SQLite
+- Replaced JSON System of storing user input/data with SQLite
 
 ### Version 0.0.1
 - Used JSON to store user input
