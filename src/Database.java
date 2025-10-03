@@ -77,4 +77,51 @@ public class Database {
 
     }
 
+    //Deletes data from the database through TransactionID
+    public void delete(List<Transactions> transactions, int id) {
+
+        String sql = "DELETE FROM Transactions WHERE TransactionID = ?";
+
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            pstmt.executeUpdate();
+
+        }catch(Exception e) {
+
+            System.err.println(e.getMessage());
+
+        }
+
+    }
+
+    //WIP
+    //MIGHT NOT NEED TO USE
+    public void view(List<Transactions> transactions) {
+
+        String sql = "SELECT * FROM Transactions"; 
+
+        try(Statement stmt = connection.createStatement()) {
+
+            stmt.executeQuery(sql);
+
+        }catch(Exception e) {
+
+            System.out.println(e.getMessage());
+
+        }
+
+    }
+
+    //WIP
+    /* Edits data from the database
+    public void edit(List<Transactions> transactions, int id) {
+
+        String sql = "UPDATE Transactions " +
+                    "SET "
+
+    } */
+
+
 }
