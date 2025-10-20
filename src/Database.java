@@ -96,15 +96,27 @@ public class Database {
 
     }
 
-    //WIP
-    //MIGHT NOT NEED TO USE
-    public void view(List<Transactions> transactions) {
+    //Method to access Transactions for server-side use
+    public List<Transactions> viewTransactions() {
 
+        List<Transactions> transactions = new ArrayList<>();
         String sql = "SELECT * FROM Transactions"; 
 
         try(Statement stmt = connection.createStatement()) {
 
-            stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while(rs.next()) {
+
+                int id = rs.getInt("transactionID");
+                double amount = rs.getDouble("Amount");
+                String description = rs.getString("Description");
+                String category = rs.getString("Category");
+                String date = rs.getString("Date");
+
+                transactions.add(new Transactions(id, amount, category, description, date));
+                                
+            }
 
         }catch(Exception e) {
 
@@ -112,8 +124,10 @@ public class Database {
 
         }
 
-    }
+        return transactions;
 
+    }
+    
     //WIP
     /* Edits data from the database
     public void edit(List<Transactions> transactions, int id) {
@@ -125,3 +139,4 @@ public class Database {
 
 
 }
+
