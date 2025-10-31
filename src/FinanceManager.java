@@ -6,21 +6,16 @@ public class FinanceManager {
     //Fields
     private final Database database;
     private List<Transactions> transactions;
-    private final double budget;
+    private double budget;
     
     //Constructors
-    public FinanceManager() {
+    public FinanceManager(Database database) {
 
-        this.database = new Database();
+        this.database = database;
+        this.budget = 0;
         this.transactions = new ArrayList<>();
 
         loadTransactions();
-
-    }
-
-    public FinanceManager(double budget) {
-
-        this.budget = budget;
 
     }
 
@@ -47,6 +42,19 @@ public class FinanceManager {
 
     }
 
-    public double 
+    //Returns the total amount of transactions
+    public double totalTransactionAmount() {
+
+        int amount = 0;
+
+        for(int i = 0; i < transactions.size(); i++) {
+
+            amount += transactions.get(i).getAmount();
+
+        }
+
+        return amount;
+
+    }
 
 }
