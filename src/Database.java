@@ -1,12 +1,14 @@
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
 
-    //Variables
-    private static final String DB_URL = "jdbc:sqlite:C:\\Users\\Marion\\Documents\\Budget App\\transactions.db";
+    //Fields
+    private static final String DB_URL = "jdbc:sqlite:C:\\Users\\Marion\\Documents\\Budget App\\resources\\transactions.db";
     private Connection connection;
     
+    //Constructor
     //Establishes a connection to transactions.db
     //If file does not exist, create a new file with that file name
     public Database() {
@@ -27,16 +29,17 @@ public class Database {
 
     }
 
+    //Methods
     //Creates a transaction table if it doesn't exist.
     //Otherwise, just move on
     public void createTable() {
 
         String sql = "CREATE TABLE IF NOT EXISTS Transactions (" +
-                    " transactionID INTEGER PRIMARY KEY     AUTOINCREMENT, " +
+                    " transactionID  INTEGER PRIMARY KEY     AUTOINCREMENT, " +
                     " Amount         REAL     NOT NULL, " +
-                    " Description    TEXT, " +
-                    " Category       TEXT    NOT NULL, " +
-                    " Date           TEXT)";
+                    " Description    TEXT     NOT NULL, " +
+                    " Category       TEXT     NOT NULL, " +
+                    " Date           TEXT     NOT NULL)";
 
         try (Statement stmt = connection.createStatement()){
 
@@ -63,22 +66,22 @@ public class Database {
                 pstmt.setDouble(1, transaction.getAmount());
                 pstmt.setString(2, transaction.getDescription());
                 pstmt.setString(3, transaction.getCategory());
-                pstmt.setString(4, transaction.getDate().toString());
+                pstmt.setString(4, transaction.getDate());
 
                 pstmt.executeUpdate();
 
             }
 
-        }catch(Exception e) {
+        }catch(SQLException e) {
 
-            System.err.println(e.getMessage());
+            System.err.println("Insertion failed. " + e.getMessage());
 
         }
 
     }
 
     //Deletes data from the database through TransactionID
-    public void delete(List<Transactions> transactions, int id) {
+    public void delete(int id) {
 
         String sql = "DELETE FROM Transactions WHERE TransactionID = ?";
 
@@ -87,10 +90,11 @@ public class Database {
             pstmt.setInt(1, id);
 
             pstmt.executeUpdate();
+            System.out.println("Transaction deleted successfully.");
 
-        }catch(Exception e) {
+        }catch(SQLException e) {
 
-            System.err.println(e.getMessage());
+            System.err.println("Deletion failed. " + e.getMessage());
 
         }
 
@@ -118,25 +122,104 @@ public class Database {
                                 
             }
 
-        }catch(Exception e) {
+        }catch(SQLException e) {
 
-            System.out.println(e.getMessage());
+            System.out.println("Task failed. " + e.getMessage());
 
         }
 
         return transactions;
 
     }
-    
-    //WIP
-    /* Edits data from the database
-    public void edit(List<Transactions> transactions, int id) {
 
-        String sql = "UPDATE Transactions " +
-                    "SET "
 
-    } */
+    //Method to edit transaction amount based on transactionID
+    public void updateTransactionAmount(int id, double amount) {
 
+        String sql = "UPDATE Transactions SET Amount = ? WHERE transactionID = ?";
+
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            pstmt.setDouble(2, amount);
+
+            pstmt.executeUpdate();
+            System.out.println("Information updated successfully.");
+
+        }catch(SQLException e) {
+
+            System.out.println("Update information failed." + e.getMessage());
+            e.printStackTrace();
+
+        }
+
+    }
+
+    //Method to edit transaction description based on transactionID
+    public void updateTransactionDescription(int id, String description) {
+
+        String sql = "UPDATE Transactions SET Description = ? WHERE transactionID = ?";
+
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setString(1, description);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+            System.out.println("Information updated successfully.");
+
+
+        }catch(SQLException e) {
+
+            System.out.println("Update information failed." + e.getMessage());
+            e.printStackTrace();
+
+        }
+
+    }
+
+    //Method to edit transaction category based on transactionID
+    public void updateTransactionCategory(int id, String category) {
+
+        String sql = "UPDATE Transactions SET Category = ? WHERE transactionID = ?";
+
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setString(1, category);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+            System.out.println("Information updated successfully.");
+
+        }catch(SQLException e) {
+
+            System.out.println("Update information failed." + e.getMessage());
+            e.printStackTrace();
+
+        }
+
+    }
+
+    //Method to edit transaction date based on transactionID
+    public void updateTransactionDate(int id, String date) {
+
+        String sql = "UPDATE Transactions SET Date = ? WHERE transactionID = ?";
+
+        try(PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setString(1, date);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+            System.out.println("Information updated successfully.");
+
+        }catch(SQLException e) {
+
+            System.out.println("Update information failed." + e.getMessage());
+            e.printStackTrace();
+
+        }
+
+    }
 
 }
-
